@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Currency Converter</string>
+    <string name="currency">Choose Currency</string>
+    <string-array name="currencies">
+        <item>AUD - Australian Dollars</item>
+        <item>BRL - Brazilian Real</item>
+        <item>CAD - Canadian Dollars</item>
+        <item>CNY - Chinese yuan</item>
+        <item>COP - Colombian Pesos</item>
+        <item>EUR - Euros</item>
+        <item>GBP - British Pounds</item>
+        <item>INR - Indian rupees</item>
+        <item>MXN - Mexican Pesos</item>
+        <item>USD - U.S. Dollars</item>
+    </string-array>
+</resources>
