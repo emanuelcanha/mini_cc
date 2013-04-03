@@ -1,4 +1,4 @@
-package com.cc.android.converter;
+package com.minicc;
 
 import java.io.BufferedReader;
 import java.io.IOException;

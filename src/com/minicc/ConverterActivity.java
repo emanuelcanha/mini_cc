@@ -1,4 +1,4 @@
-package com.cc.android.converter;
+package com.minicc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
 
-public class CurrencyConverter extends SherlockActivity {
+public class ConverterActivity extends SherlockActivity {
 	private EditText amount;
 	private Spinner fromSpinner, toSpinner;
 	private final String SHARED_PREFS_FILE = "currencies";
@@ -178,7 +178,7 @@ public class CurrencyConverter extends SherlockActivity {
 
 	private void openAddCurrencyActivity() {
 		Intent addCurrency = new Intent();
-		addCurrency.setClass(getApplicationContext(), AddCurrencyActivity.class);
+		addCurrency.setClass(getApplicationContext(), AddActivity.class);
 		startActivity(addCurrency);
 	}
 
@@ -224,11 +224,16 @@ public class CurrencyConverter extends SherlockActivity {
 		
 		@Override
 		protected void onPostExecute(String result){
-			TextView resultText = (TextView) findViewById(R.id.resultText);
-			resultText.setText(result);
 			
+			showResult(result);
 		}
 		
+	}
+	
+	private void showResult(String result) {
+		String[] resultValue = result.split("\"");
+		TextView resultText = (TextView) findViewById(R.id.resultText);
+		resultText.setText(resultValue[3].replace("\ufffd", " "));
 	}
 
 	private class MyAdapter implements SpinnerAdapter {

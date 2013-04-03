@@ -1,4 +1,3 @@
-int array currencies 0x7f0c0000
 int attr actionBarDivider 0x7f01000e
 int attr actionBarItemBackground 0x7f01000f
 int attr actionBarSize 0x7f01000d

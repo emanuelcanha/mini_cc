@@ -1,4 +1,4 @@
-package com.cc.android.converter;
+package com.minicc;
 
 
 public class Currency {

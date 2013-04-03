@@ -1,4 +1,4 @@
-package com.cc.android.converter;
+package com.minicc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,8 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockListActivity;
 
-public class AddCurrencyActivity extends SherlockListActivity {
+
+public class AddActivity extends SherlockListActivity {
 	private final String SHARED_PREFS_FILE = "currencies";
 	private SharedPreferences prefs;
 	private Editor editor;
