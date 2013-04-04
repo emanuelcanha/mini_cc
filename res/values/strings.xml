@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">mini cc</string>
+    <string name="app_name">Mini Currency Converter</string>
     <string name="currency">Choose Currency</string>
 </resources>

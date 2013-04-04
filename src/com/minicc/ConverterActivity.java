@@ -37,7 +37,7 @@ public class ConverterActivity extends SherlockActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.setTheme(R.style.Theme_Sherlock);
+		setTheme(R.style.Theme_Sherlock);
 		setContentView(R.layout.main);
 
 		fromSpinner = (Spinner) findViewById(R.id.spinner1);
@@ -269,8 +269,8 @@ public class ConverterActivity extends SherlockActivity {
 			TextView textView = new TextView(getApplicationContext());
 			textView.setTextColor(Color.BLACK);
 
-			Currency c = mCurrencies.get(position);
-			textView.setText(c.name + " (" + c.code + ")");
+			Currency currency = mCurrencies.get(position);
+			textView.setText(currency.code);
 			return textView;
 		}
 
@@ -303,8 +303,8 @@ public class ConverterActivity extends SherlockActivity {
 
 			TextView textView = (TextView) row.findViewById(R.id.spinner_text);
 
-			Currency c = mCurrencies.get(position);
-			textView.setText(c.name + " (" + c.code + ")");
+			Currency currency = mCurrencies.get(position);
+			textView.setText(currency.name + " (" + currency.code + ")");
 
 			return textView;
 
