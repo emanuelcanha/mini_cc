@@ -2,107 +2,88 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp" >
+    android:padding="10dp" >
 
-    <LinearLayout
-        android:id="@+id/linear1"
-        android:layout_width="fill_parent"
+    <TextView
+        android:id="@+id/textview_value"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp" >
+        android:text="VALUE:" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="VALUE:" />
+    <EditText
+        android:id="@+id/edittext_convert_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@+id/button_convert"
+        android:layout_toRightOf="@id/textview_value"
+        android:inputType="numberDecimal" />
 
-        <EditText
-            android:id="@+id/convert_amount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:inputType="numberDecimal" />
+    <Button
+        android:id="@+id/button_convert"
+        style="@style/Widget.Sherlock.ActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/bg_switch"
+        android:onClick="Convert"
+        android:text="Convert"
+        android:textColor="#fff" >
+    </Button>
 
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1.5"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:background="@drawable/bg_switch"
-            android:onClick="Convert"
-            android:text="Convert"
-            android:textColor="#fff" >
-        </Button>
-    </LinearLayout>
-
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/linear2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linear1" >
+        android:layout_below="@id/button_convert" >
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/textview_from"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginRight="10dp"
-            android:layout_weight="5"
-            android:orientation="vertical" >
+            android:text="FROM:" />
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
+        <Spinner
+            android:id="@+id/spinner_from"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/imageview_switch"
+            android:layout_toRightOf="@id/textview_from"
+            android:prompt="@string/currency" >
+        </Spinner>
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1.3"
-                    android:text="FROM:" />
+        <TextView
+            android:id="@+id/textview_to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/spinner_from"
+            android:text="TO:" />
 
-                <Spinner
-                    android:id="@+id/spinner1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="6"
-                    android:prompt="@string/currency" >
-                </Spinner>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.3"
-                    android:text="TO:" />
-
-                <Spinner
-                    android:id="@+id/spinner2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="6"
-                    android:prompt="@string/currency" >
-                </Spinner>
-            </LinearLayout>
-        </LinearLayout>
+        <Spinner
+            android:id="@+id/spinner_to"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/spinner_from"
+            android:layout_toLeftOf="@id/imageview_switch"
+            android:layout_toRightOf="@id/textview_from"
+            android:prompt="@string/currency" >
+        </Spinner>
 
         <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="0dp"
+            android:id="@+id/imageview_switch"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:background="@drawable/bg_switch"
             android:onClick="Switch"
-            android:padding="3dp"
             android:src="@drawable/ic_switch" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/linear4"

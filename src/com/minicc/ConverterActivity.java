@@ -37,18 +37,17 @@ public class ConverterActivity extends SherlockActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setTheme(R.style.Theme_Sherlock);
 		setContentView(R.layout.main);
 
-		fromSpinner = (Spinner) findViewById(R.id.spinner1);
-		toSpinner = (Spinner) findViewById(R.id.spinner2);
+		fromSpinner = (Spinner) findViewById(R.id.spinner_from);
+		toSpinner = (Spinner) findViewById(R.id.spinner_to);
 
 		personalCurrencies = new ArrayList<Currency>();
 
 		prefs = getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE);
 		editor = prefs.edit();
 
-		amount = (EditText) findViewById(R.id.convert_amount);
+		amount = (EditText) findViewById(R.id.edittext_convert_amount);
 
 	}
 
@@ -265,9 +264,13 @@ public class ConverterActivity extends SherlockActivity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-
-			TextView textView = new TextView(getApplicationContext());
-			textView.setTextColor(Color.BLACK);
+			
+			LayoutInflater inflater = getLayoutInflater();
+			View row = inflater.inflate(R.layout.spinner_dropdown_row, parent, false);
+			
+			//TextView textView = new TextView(getApplicationContext());
+			//textView.setTextColor(Color.BLACK);
+			TextView textView = (TextView) row.findViewById(R.id.dropdown_text);
 
 			Currency currency = mCurrencies.get(position);
 			textView.setText(currency.code);
@@ -304,7 +307,7 @@ public class ConverterActivity extends SherlockActivity {
 			TextView textView = (TextView) row.findViewById(R.id.spinner_text);
 
 			Currency currency = mCurrencies.get(position);
-			textView.setText(currency.name + " (" + currency.code + ")");
+			textView.setText(currency.code + " - " + currency.name);
 
 			return textView;
 
