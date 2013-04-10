@@ -302,11 +302,10 @@ int id edit_query 0x7f050027
 int id edittext_convert_amount 0x7f050039
 int id homeAsUp 0x7f050006
 int id imageview_switch 0x7f05003e
-int id linear2 0x7f05003b
-int id linear4 0x7f050041
 int id listMode 0x7f050002
 int id list_text 0x7f050037
 int id normal 0x7f050001
+int id progressbar 0x7f050041
 int id resultText 0x7f050042
 int id showCustom 0x7f050008
 int id showHome 0x7f050005
@@ -314,6 +313,7 @@ int id showTitle 0x7f050007
 int id spinner_from 0x7f05003d
 int id spinner_text 0x7f050044
 int id spinner_to 0x7f050040
+int id spinners 0x7f05003b
 int id tabMode 0x7f050003
 int id textview_from 0x7f05003c
 int id textview_to 0x7f05003f

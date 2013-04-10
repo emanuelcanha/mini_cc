@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.DataSetObserver;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -33,15 +33,18 @@ public class ConverterActivity extends SherlockActivity {
 	private Editor editor;
 	private MyAdapter adapter;
 	private List<Currency> personalCurrencies;
+	private ProgressBar progressBar;
+	private TextView resultText;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
+		progressBar = (ProgressBar) findViewById(R.id.progressbar);
 		fromSpinner = (Spinner) findViewById(R.id.spinner_from);
 		toSpinner = (Spinner) findViewById(R.id.spinner_to);
-
+		resultText = (TextView) findViewById(R.id.resultText);
 		personalCurrencies = new ArrayList<Currency>();
 
 		prefs = getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE);
@@ -213,6 +216,13 @@ public class ConverterActivity extends SherlockActivity {
 	private class DownloadTask extends AsyncTask<String, Void, String>{
 
 		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			progressBar.setVisibility(View.VISIBLE);
+			resultText.setText("");
+		}
+		
+		@Override
 		protected String doInBackground(String... url) {
 			
 			String httpResult = Util.Download(url[0]);
@@ -225,13 +235,13 @@ public class ConverterActivity extends SherlockActivity {
 		protected void onPostExecute(String result){
 			
 			showResult(result);
+			progressBar.setVisibility(View.INVISIBLE);
 		}
 		
 	}
 	
 	private void showResult(String result) {
 		String[] resultValue = result.split("\"");
-		TextView resultText = (TextView) findViewById(R.id.resultText);
 		resultText.setText(resultValue[3].replace("\ufffd", " "));
 	}
 
