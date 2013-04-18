@@ -14,22 +14,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.util.Log;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 public class Util {
 
 	public static String Download(String urlString) {
-		String teste = "";
+		String data = "";
 		try {
 			URL url = new URL(urlString);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			teste = readStream(con.getInputStream());
+			data = readStream(con.getInputStream());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		Log.d("Result", teste);
-		return teste;
+		return data;
 
 	}
 
@@ -147,6 +147,13 @@ public class Util {
 		}
 
 		return personalCurrencies;
+	}
+
+	public static boolean isNetworkAvailable(Context context) {
+		ConnectivityManager connectivityManager = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
 
 }

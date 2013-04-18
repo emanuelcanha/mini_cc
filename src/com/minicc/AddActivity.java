@@ -47,7 +47,7 @@ public class AddActivity extends SherlockListActivity {
 
 	}
 
-	public void Save(View v) {
+	public void save(View v) {
 
 		List<Currency> personalCurrencies = new ArrayList<Currency>();
 		personalCurrencies = Util.getPersonalCurrencyList(allCurrencies);
@@ -56,7 +56,12 @@ public class AddActivity extends SherlockListActivity {
 		editor.putString("currencies", Util.getJSONString(personalCurrencies));
 		editor.commit();
 
-		this.finish();
+		finish();
+	}
+	
+	public void cancel(View v) {
+		
+		finish();
 	}
 
 	public static class MyAdapter extends ArrayAdapter<Currency> {

@@ -11,19 +11,22 @@ import android.database.DataSetObserver;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.SubMenu;
 
 public class ConverterActivity extends SherlockActivity {
 	private EditText amount;
@@ -46,11 +49,23 @@ public class ConverterActivity extends SherlockActivity {
 		toSpinner = (Spinner) findViewById(R.id.spinner_to);
 		resultText = (TextView) findViewById(R.id.resultText);
 		personalCurrencies = new ArrayList<Currency>();
+		amount = (EditText) findViewById(R.id.edittext_convert_amount);
+		amount.setOnEditorActionListener(new OnEditorActionListener() {
+			
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				
+				if (actionId == EditorInfo.IME_ACTION_DONE)
+					Convert();
+					
+				return true;
+			}
+		});
 
 		prefs = getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE);
 		editor = prefs.edit();
 
-		amount = (EditText) findViewById(R.id.edittext_convert_amount);
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
 	}
 
@@ -65,11 +80,9 @@ public class ConverterActivity extends SherlockActivity {
 			personalCurrencies = Util.getCurrenciesList(currenciesJSON);
 			setSpinners();
 
-		}
+		} else
 
-		else
 			loadDefaultCurrencies();
-
 	}
 
 	private void setSpinners() {
@@ -88,10 +101,6 @@ public class ConverterActivity extends SherlockActivity {
 
 		if (toSelected <= personalCurrenciesNum)
 			toSpinner.setSelection(toSelected, true);
-
-		Log.d("load FromSelection", String.valueOf(prefs.getInt("spinnerFromSelection", 0)));
-		Log.d("load ToSelection", String.valueOf(prefs.getInt("spinnerToSelection", 0)));
-
 	}
 
 	private void loadDefaultCurrencies() {
@@ -118,28 +127,35 @@ public class ConverterActivity extends SherlockActivity {
 
 		if (fromSpinner.getAdapter() != null && toSpinner.getAdapter() != null) {
 
-			Log.d("onPause", "Saved spinner state");
-
 			editor.putInt("spinnerFromSelection", fromSpinner.getSelectedItemPosition());
 			editor.putInt("spinnerToSelection", toSpinner.getSelectedItemPosition());
 
-			Log.d("spinnerFromSelection", String.valueOf(fromSpinner.getSelectedItemPosition()));
-			Log.d("toFromSelection", String.valueOf(toSpinner.getSelectedItemPosition()));
-
 			editor.commit();
-
 		}
 	};
+	
+	public void ConvertClicked(View v) {
+		Convert();
+	}
 
-	public void Convert(View v) {
+	public void Convert() {
 		Currency c;
-		c = (Currency) fromSpinner.getSelectedItem();
-		String fromCurr = c.code;
 
-		c = (Currency) toSpinner.getSelectedItem();
-		String toCurr = c.code;
+		if (adapter.getCount() == 0)
+			return;
 
-		Convert(fromCurr, toCurr, amount.getText().toString());
+		else if (!Util.isNetworkAvailable(this))
+			resultText.setText("No Internet Connection.");
+
+		else {
+			c = (Currency) fromSpinner.getSelectedItem();
+			String fromCurr = c.code;
+
+			c = (Currency) toSpinner.getSelectedItem();
+			String toCurr = c.code;
+
+			Convert(fromCurr, toCurr, amount.getText().toString());
+		}
 
 	}
 
@@ -155,12 +171,7 @@ public class ConverterActivity extends SherlockActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
-		SubMenu sub = menu.addSubMenu("Options");
-		sub.setIcon(R.drawable.ic_compose_inverse);
-		sub.add(0, 1, 0, "Add Currency");
-		sub.add(0, 2, 0, "Settings");
-		sub.add(0, 3, 0, "About");
-		sub.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		menu.add("Add").setIcon(R.drawable.ic_action_add_currency).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
 		return true;
 
@@ -169,7 +180,7 @@ public class ConverterActivity extends SherlockActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
-		if (item.getItemId() == 1) {
+		if (item.getItemId() == 0) {
 			openAddCurrencyActivity();
 			return true;
 		}
@@ -187,33 +198,13 @@ public class ConverterActivity extends SherlockActivity {
 	private void Convert(String from_Currency, String to_Currency, String amount) {
 
 		// www.google.com/ig/calculator?q=10USD=?EUR - Google calculator API
-
 		String url = "http://www.google.com/ig/calculator?q=" + amount + from_Currency + "=?" + to_Currency;
 
-
 		new DownloadTask().execute(url);
-		
-		//httpResult = httpResult.replace("\ufffd", " ");
-
-		//Log.d("Result2", httpResult);
-
-		/*
-		 * String[] resultString = httpResult.split("\"");
-		 * 
-		 * TextView result = (TextView) findViewById(R.id.resultText);
-		 * 
-		 * String tmp = ""; try { tmp = URLDecoder.decode(resultString[3],
-		 * "UTF-8"); } catch (UnsupportedEncodingException e) { // TODO
-		 * Auto-generated catch block e.printStackTrace(); }
-		 * 
-		 * tmp.replace(" ", "%20");
-		 * 
-		 * result.setText(tmp);
-		 */
 
 	}
-	
-	private class DownloadTask extends AsyncTask<String, Void, String>{
+
+	private class DownloadTask extends AsyncTask<String, Void, String> {
 
 		@Override
 		protected void onPreExecute() {
@@ -221,29 +212,28 @@ public class ConverterActivity extends SherlockActivity {
 			progressBar.setVisibility(View.VISIBLE);
 			resultText.setText("");
 		}
-		
+
 		@Override
 		protected String doInBackground(String... url) {
-			
+
 			String httpResult = Util.Download(url[0]);
-			
 			return httpResult;
-			
 		}
-		
+
 		@Override
-		protected void onPostExecute(String result){
-			
+		protected void onPostExecute(String result) {
+
 			showResult(result);
 			progressBar.setVisibility(View.INVISIBLE);
 		}
-		
+
 	}
-	
+
 	private void showResult(String result) {
 		String[] resultValue = result.split("\"");
 		resultText.setText(resultValue[3].replace("\ufffd", " "));
 	}
+	
 
 	private class MyAdapter implements SpinnerAdapter {
 		List<Currency> mCurrencies;
@@ -274,12 +264,10 @@ public class ConverterActivity extends SherlockActivity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			
+
 			LayoutInflater inflater = getLayoutInflater();
-			View row = inflater.inflate(R.layout.spinner_dropdown_row, parent, false);
-			
-			//TextView textView = new TextView(getApplicationContext());
-			//textView.setTextColor(Color.BLACK);
+			View row = inflater.inflate(R.layout.spinner_row, parent, false);
+
 			TextView textView = (TextView) row.findViewById(R.id.dropdown_text);
 
 			Currency currency = mCurrencies.get(position);
@@ -303,16 +291,18 @@ public class ConverterActivity extends SherlockActivity {
 		}
 
 		@Override
-		public void registerDataSetObserver(DataSetObserver observer) {}
+		public void registerDataSetObserver(DataSetObserver observer) {
+		}
 
 		@Override
-		public void unregisterDataSetObserver(DataSetObserver observer) {}
+		public void unregisterDataSetObserver(DataSetObserver observer) {
+		}
 
 		@Override
 		public View getDropDownView(int position, View convertView, ViewGroup parent) {
 
 			LayoutInflater inflater = getLayoutInflater();
-			View row = inflater.inflate(R.layout.spinner_row, parent, false);
+			View row = inflater.inflate(R.layout.spinner_row_item, parent, false);
 
 			TextView textView = (TextView) row.findViewById(R.id.spinner_text);
 
