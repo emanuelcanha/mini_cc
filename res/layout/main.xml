@@ -8,6 +8,7 @@
         android:id="@+id/textview_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/edittext_convert_amount"
         android:text="VALUE:" />
 
     <EditText
@@ -16,10 +17,10 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
         android:layout_toLeftOf="@+id/button_convert"
         android:layout_toRightOf="@id/textview_value"
-        android:imeActionLabel="Convert"
-        android:inputType="textNoSuggestions|numberDecimal" />
+        android:inputType="textNoSuggestions|number" />
 
     <Button
         android:id="@+id/button_convert"
@@ -27,6 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_marginTop="2dp"
         android:background="@drawable/bg_button"
         android:onClick="ConvertClicked"
         android:text="Convert"
@@ -37,22 +39,26 @@
         android:id="@+id/spinners"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/button_convert" >
+        android:layout_below="@id/button_convert"
+        android:layout_marginTop="10dp" >
 
         <TextView
             android:id="@+id/textview_from"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="10dp"
+            android:layout_alignTop="@+id/spinner_from"
+            android:layout_marginTop="10dp"
             android:text="FROM:" />
 
         <Spinner
             android:id="@+id/spinner_from"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="25dp"
             android:layout_toLeftOf="@+id/imageview_switch"
             android:layout_toRightOf="@id/textview_from"
+            android:background="@drawable/bg_button"
             android:prompt="@string/currency" >
         </Spinner>
 
@@ -60,7 +66,8 @@
             android:id="@+id/textview_to"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/spinner_from"
+            android:layout_alignTop="@+id/spinner_to"
+            android:layout_marginTop="10dp"
             android:text="TO:" />
 
         <Spinner
@@ -68,8 +75,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/spinner_from"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="5dp"
             android:layout_toLeftOf="@id/imageview_switch"
             android:layout_toRightOf="@id/textview_from"
+            android:background="@drawable/bg_button"
             android:prompt="@string/currency" >
         </Spinner>
 
@@ -93,7 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/spinners"
         android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"
+        android:layout_marginTop="20dp"
         android:visibility="invisible" />
 
     <TextView
@@ -101,8 +112,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/spinners"
-        android:layout_margin="10dp"
-        android:textColor="#ff33b5e5"
+        android:layout_marginTop="5dp"
+        android:padding="10dp"
+        android:textColor="#fff"
         android:textSize="25sp" />
+    <!-- android:textColor="#ff33b5e5" -->
 
 </RelativeLayout>

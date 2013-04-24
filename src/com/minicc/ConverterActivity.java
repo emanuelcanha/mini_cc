@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -27,9 +29,10 @@ import android.widget.TextView.OnEditorActionListener;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.minicc.R.color;
 
 public class ConverterActivity extends SherlockActivity {
-	private EditText amount;
+	private EditText amountEditText;
 	private Spinner fromSpinner, toSpinner;
 	private final String SHARED_PREFS_FILE = "currencies";
 	private SharedPreferences prefs;
@@ -49,15 +52,15 @@ public class ConverterActivity extends SherlockActivity {
 		toSpinner = (Spinner) findViewById(R.id.spinner_to);
 		resultText = (TextView) findViewById(R.id.resultText);
 		personalCurrencies = new ArrayList<Currency>();
-		amount = (EditText) findViewById(R.id.edittext_convert_amount);
-		amount.setOnEditorActionListener(new OnEditorActionListener() {
-			
+		amountEditText = (EditText) findViewById(R.id.edittext_convert_amount);
+		amountEditText.setOnEditorActionListener(new OnEditorActionListener() {
+
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				
+
 				if (actionId == EditorInfo.IME_ACTION_DONE)
-					Convert();
-					
+					ConvertAmount();
+
 				return true;
 			}
 		});
@@ -133,12 +136,12 @@ public class ConverterActivity extends SherlockActivity {
 			editor.commit();
 		}
 	};
-	
+
 	public void ConvertClicked(View v) {
-		Convert();
+		ConvertAmount();
 	}
 
-	public void Convert() {
+	public void ConvertAmount() {
 		Currency c;
 
 		if (adapter.getCount() == 0)
@@ -154,7 +157,7 @@ public class ConverterActivity extends SherlockActivity {
 			c = (Currency) toSpinner.getSelectedItem();
 			String toCurr = c.code;
 
-			Convert(fromCurr, toCurr, amount.getText().toString());
+			Convert(fromCurr, toCurr, amountEditText.getText().toString());
 		}
 
 	}
@@ -223,17 +226,31 @@ public class ConverterActivity extends SherlockActivity {
 		@Override
 		protected void onPostExecute(String result) {
 
-			showResult(result);
-			progressBar.setVisibility(View.INVISIBLE);
+			if (result.equals(""))
+				showErrorMessage();
+			else {
+				
+				showResult(result);
+				progressBar.setVisibility(View.INVISIBLE);
+			}
 		}
-
 	}
 
 	private void showResult(String result) {
+
 		String[] resultValue = result.split("\"");
-		resultText.setText(resultValue[3].replace("\ufffd", " "));
+
+		String resultString = resultValue[3];
+
+		if (resultString.equals(""))
+			showErrorMessage();
+		else
+			resultText.setText(resultString.replace("\ufffd", " "));
 	}
-	
+
+	private void showErrorMessage() {
+		resultText.setText("ups something went wrong...");
+	}
 
 	private class MyAdapter implements SpinnerAdapter {
 		List<Currency> mCurrencies;
@@ -262,6 +279,12 @@ public class ConverterActivity extends SherlockActivity {
 			return android.R.layout.simple_spinner_item;
 		}
 
+		/*
+		 * @Override public View getView(int position, View convertView,
+		 * ViewGroup parent) { View v = findViewById(getItemViewType(position));
+		 * return v; }
+		 */
+
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -272,7 +295,7 @@ public class ConverterActivity extends SherlockActivity {
 
 			Currency currency = mCurrencies.get(position);
 			textView.setText(currency.code);
-			return textView;
+			return row;
 		}
 
 		@Override
@@ -309,7 +332,7 @@ public class ConverterActivity extends SherlockActivity {
 			Currency currency = mCurrencies.get(position);
 			textView.setText(currency.code + " - " + currency.name);
 
-			return textView;
+			return row;
 
 		}
 
